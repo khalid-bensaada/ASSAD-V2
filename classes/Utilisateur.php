@@ -12,5 +12,8 @@ class Utilisateur {
     private bool $actif;
     private bool $guide_approuve;
 
+    public function __construct(){
+        
+    }
 }
 ?>
