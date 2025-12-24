@@ -187,6 +187,11 @@ class Utilisateur
         $this->actif === "actif" ;
     }
 
-    
+    public function guide(){
+        if($this->user_role !== "guide"){
+            return true;
+        }
+        $this->guide_approuve === 1 ;
+    }
 }
 ?>
