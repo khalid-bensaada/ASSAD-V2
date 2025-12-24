@@ -1,5 +1,5 @@
 <?php
-
+require_once 'classes/Database.php';
 ?>
 <!DOCTYPE html>
 
@@ -160,11 +160,13 @@
 
                     <!---Confirmation-->
                     <div class="flex flex-col gap-2">
-                        <label class="text-white text-sm font-medium ml-1" for="password">confermation your Password</label>
+                        <label class="text-white text-sm font-medium ml-1" for="password">confermation your
+                            Password</label>
                         <div class="relative flex items-center">
                             <input
                                 class="form-input w-full h-12 pl-4 pr-12 rounded-xl bg-surface-dark border border-border-dark text-white placeholder-text-muted focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-base"
-                                id="password" name="confermation" placeholder="confermation your Password" type="password" />
+                                id="password" name="confermation" placeholder="confermation your Password"
+                                type="password" />
                             <button
                                 class="absolute right-4 text-text-muted hover:text-white transition-colors flex items-center justify-center"
                                 type="button">
