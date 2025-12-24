@@ -30,7 +30,19 @@ if (isset($_POST['login'])) {
         header("Location: ");
         exit;
     }
-    
+
+    switch($user -> getrole()){
+        case "admin":
+            header("Location: admin.php");
+            break;
+        case "guide":
+            header("Location: guide.php");
+            break;
+        case "visireur":
+            header("location: visiteur.php");
+            break;
+    }
+
 }
 ?>
 <!DOCTYPE html>
