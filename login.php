@@ -3,6 +3,16 @@ require_once 'classes/Database.php';
 
 $db = new Database();
 $pdo = $db->getPdo();
+
+if (isset($_POST['login'])) {
+    $errors = [];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    require_once 'classes/Utilisateur.php';
+    $user = new Utilisateur($email,$password);
+
+}
 ?>
 <!DOCTYPE html>
 
