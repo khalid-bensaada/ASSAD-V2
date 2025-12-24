@@ -18,7 +18,7 @@ if (isset($_POST['sign'])) {
     $user-> regexE();
     $user-> foundEmail();
     $user-> hash();
-
+    $user->create();
     
 }
 
