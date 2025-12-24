@@ -8,8 +8,8 @@ CREATE TABLE utilisateurs(
     email VARCHAR(150) NOT NULL UNIQUE,
     user_role ENUM('visiteur', 'guide', 'admin') NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
-    actif VARCHAR(100) NOT NULL,
-    guide_approuve BOOLEAN
+    actif BOOLEAN DEFAULT,
+    guide_approuve BOOLEAN DEFAULT 
 );
 
 CREATE TABLE habitats (
