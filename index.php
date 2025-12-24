@@ -349,6 +349,7 @@
                         Connecting people with wildlife and conservation since 2023.
                     </p>
                 </div>
+                
                 <!-- Links 1 -->
                 <div class="flex flex-col gap-4">
                     <h4 class="text-white font-bold">Explore</h4>
