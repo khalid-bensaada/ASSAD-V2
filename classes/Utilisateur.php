@@ -120,7 +120,7 @@ class Utilisateur
     }
 
 
-    public function regexP()
+    public function regexE()
     {
         $errors = [];
         $this->errors = $errors;
@@ -147,6 +147,7 @@ class Utilisateur
 
     public function hash(){
         $password_raw = password_hash($this->password_hash, PASSWORD_DEFAULT);
+        $this->password_raw = $password_raw;
     }
     public function create()
     {
@@ -168,7 +169,7 @@ class Utilisateur
 
 
 
-    public function findByEmail($email)
+    public function foundEmail($email)
     {
         $sql = "SELECT * FROM utilisateur WHERE email = ?";
         $stmt = $this->pdo->prepare($sql);

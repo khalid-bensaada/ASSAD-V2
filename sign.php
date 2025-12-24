@@ -13,6 +13,10 @@ if (isset($_POST['sign'])) {
     $reapet = $_POST["confermation"];
 
     require_once 'classes/Utilisateur.php';
+    $user = new Utilisateur();
+    $user-> longP();
+    
+
     
 }
 
