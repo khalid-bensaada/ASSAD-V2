@@ -1,6 +1,20 @@
 <?php
 require_once 'classes/Database.php';
-require_once 'classes/Utilisateur.php';
+
+$db = new Database();
+$pdo = $db->getPdo(); 
+
+if (isset($_POST['sign'])) {
+    $errors = [];
+    $name = trim($_POST["username"]);
+    $email = trim($_POST["email"]);
+    $password_raw = $_POST["password"];
+    $role = $_POST["user_role"];
+    $reapet = $_POST["confermation"];
+
+    require_once 'classes/Utilisateur.php';
+}
+
 ?>
 <!DOCTYPE html>
 
@@ -108,7 +122,7 @@ require_once 'classes/Utilisateur.php';
                     <h2 class="text-3xl font-bold text-white">Create Account</h2>
                     <p class="text-text-muted">Enter your details to register as a new member.</p>
                 </div>
-                <form action="#" class="flex flex-col gap-5" method="POST">
+                <form action="classes/Utilisateur.php" class="flex flex-col gap-5" method="POST">
                     <!-- Role Selector -->
                     <div class="flex flex-col gap-2">
                         <label class="text-white text-sm font-medium ml-1">I am registering as a</label>
@@ -150,7 +164,8 @@ require_once 'classes/Utilisateur.php';
                         <div class="relative flex items-center">
                             <input
                                 class="form-input w-full h-12 pl-4 pr-12 rounded-xl bg-surface-dark border border-border-dark text-white placeholder-text-muted focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-base"
-                                id="password" name="password" placeholder="Create a secure password" type="password" />
+                                id="password" name="password_hash" placeholder="Create a secure password"
+                                type="password" />
                             <button
                                 class="absolute right-4 text-text-muted hover:text-white transition-colors flex items-center justify-center"
                                 type="button">

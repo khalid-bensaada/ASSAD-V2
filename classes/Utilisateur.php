@@ -15,7 +15,7 @@ class Utilisateur
     private $pdo;
 
     // make objects for the attributs i make 
-    public function __construct(string $username = "", string $email = "", string $user_role = "", string $password_hash = "", bool $actif = "", bool $guide_approuve = "")
+    public function __construct(string $username = "", string $email = "", string $user_role = "", string $password_hash = "", bool $actif = false, bool $guide_approuve = false)
     {
 
         $this->username = $username;
@@ -116,6 +116,7 @@ class Utilisateur
         ]);
 
     }
+    
 
     public function findByEmail($email)
     {
@@ -124,12 +125,6 @@ class Utilisateur
         $stmt->execute([$email]);
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($username){
-            return $username ;
-        }else{
-            return false;
-        }
 
     }
 }
