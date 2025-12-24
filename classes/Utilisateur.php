@@ -26,6 +26,48 @@ class Utilisateur
         $this->guide_approuve = $guide_approuve;
     }
 
+    //Get for read the value
+
+    public function getid(): int
+    {
+        return $this->id;
+    }
+
+    // get object of username in function 
+    public function getusername(): string
+    {
+        return $this->username;
+    }
+
+    // get object of email in function 
+    public function getemail(): string
+    {
+        return $this->email;
+    }
+    // get object of user_role in function 
+    public function getrole(): string
+    {
+        return $this->user_role;
+    }
+
+    // get object of password_hash in function 
+    public function getpassword(): string
+    {
+        return $this->password_hash;
+    }
+
+    // get object of actif in function 
+    public function getactif(): bool
+    {
+        return $this->actif;
+    }
+
+    // get object of guide_approuve in function 
+    public function getapprouve(): bool
+    {
+        return $this->guide_approuve;
+    }
+
 
 }
 ?>
