@@ -16,7 +16,8 @@ if (isset($_POST['sign'])) {
     $user = new Utilisateur();
     $user-> longP();
     $user-> regexE();
-    
+    $user-> foundEmail();
+    $user-> ();
 
     
 }
