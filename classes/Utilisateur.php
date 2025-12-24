@@ -138,7 +138,15 @@ class Utilisateur
         if (strlen($this->password_hash) < 6) {
             $errors['password_error'] = "Le mot de passe doit faire au moins 6 caractères.";
         }
+        $passRegex = '/^(?=.*[a-zA-Z])(?=.*[\d])(?=.*[-_@&!#\.*]){8,}$/';
+        if (!preg_match($passRegex, $this->password_hash)) {
+            $errors['password_error'] = "L'adresse email n'est pas valide.";
+        }
 
+    }
+
+    public function hash(){
+        $password_raw = password_hash($this->password_hash, PASSWORD_DEFAULT);
     }
     public function create()
     {
