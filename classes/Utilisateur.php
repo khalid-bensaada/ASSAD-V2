@@ -125,6 +125,12 @@ class Utilisateur
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
 
+        if ($username){
+            return $username ;
+        }else{
+            return false;
+        }
+
     }
 }
 ?>
