@@ -95,6 +95,10 @@ class Utilisateur
     {
         $this->password_hash = $password_hash;
     }
+
+    public function setreapet(string $reapet){
+        $this -> reapet = $reapet ;
+    }
     public function setactif(bool $actif): void
     {
         $this->actif = $actif;
