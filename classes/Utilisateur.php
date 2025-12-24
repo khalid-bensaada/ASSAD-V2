@@ -68,6 +68,37 @@ class Utilisateur
         return $this->guide_approuve;
     }
 
+        // for madify values or type of variable
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+    public function setusername(string $username): void
+    {
+        $this->username = $username;
+    }
+    public function setemail(string $email): void
+    {
+        $this->email = $email;
+    }
+    public function setrol(string $user_role): void
+    {
+        $this->user_role = $user_role;
+    }
+    public function setpassword(string $password_hash): void
+    {
+        $this->password_hash = $password_hash;
+    }
+    public function setactif(bool $actif): void
+    {
+        $this->actif = $actif;
+    }
+    public function setapprouve(bool $guide_approuve): void
+    {
+        $this->guide_approuve = $guide_approuve;
+    }
+
 
 }
 ?>
