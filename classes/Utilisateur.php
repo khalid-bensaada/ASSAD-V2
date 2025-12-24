@@ -12,11 +12,11 @@ class Utilisateur
     private bool $actif;
     private bool $guide_approuve;
 
-    private string $reapet ;
+    private string $reapet;
     private $pdo;
 
     // make objects for the attributs i make 
-    public function __construct(string $username = "", string $email = "", string $user_role = "", string $password_hash = "", string $reapet = "",bool $actif = false, bool $guide_approuve = false)
+    public function __construct(string $username = "", string $email = "", string $user_role = "", string $password_hash = "", string $reapet = "", bool $actif = false, bool $guide_approuve = false)
     {
 
         $this->username = $username;
@@ -58,7 +58,8 @@ class Utilisateur
         return $this->password_hash;
     }
 
-    public function getreapet(): string{
+    public function getreapet(): string
+    {
         return $this->reapet;
     }
     // get object of actif in function 
@@ -73,7 +74,7 @@ class Utilisateur
         return $this->guide_approuve;
     }
 
-        // for madify values or type of variable
+    // for madify values or type of variable
 
     public function setId(int $id): void
     {
@@ -96,8 +97,9 @@ class Utilisateur
         $this->password_hash = $password_hash;
     }
 
-    public function setreapet(string $reapet){
-        $this -> reapet = $reapet ;
+    public function setreapet(string $reapet)
+    {
+        $this->reapet = $reapet;
     }
     public function setactif(bool $actif): void
     {
@@ -108,12 +110,17 @@ class Utilisateur
         $this->guide_approuve = $guide_approuve;
     }
 
-    public function emptyV (){
-        if(!empty($this->username) && !empty($this->email) && !empty($this->user_role) && !empty($this->password_hash) ){
-
+    public function emptyV()
+    {
+        if (!empty($this->username) && !empty($this->email) && !empty($this->user_role) && !empty($this->password_hash) && !empty($this->reapet)) {
+            return true;
+        } else {
+            return false;
         }
     }
 
+
+    
     public function create()
     {
         $sql = "INSERT INTO utilisateurs (username, email, user_role , password_hash )
@@ -131,8 +138,8 @@ class Utilisateur
         ]);
 
     }
-    
-    
+
+
 
     public function findByEmail($email)
     {
