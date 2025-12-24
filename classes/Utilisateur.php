@@ -120,6 +120,17 @@ class Utilisateur
     }
 
 
+    public function regexP()
+    {
+        $errors = [];
+        $this->errors = $errors;
+        $pattern_email = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/";
+        if (!preg_match($pattern_email, $this->email)) {
+            $errors['email_error'] = "L'adresse email n'est pas valide (format attendu: nom@exemple.com).";
+        }
+
+    }
+
     
     public function create()
     {
