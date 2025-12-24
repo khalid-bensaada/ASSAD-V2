@@ -11,7 +11,13 @@ if (isset($_POST['login'])) {
 
     require_once 'classes/Utilisateur.php';
     $user = new Utilisateur($email,$password);
-
+    $select = $user->foundEmail($email);
+    if(!$select){
+        $errors['email_error']='Email or password not correct try again please';
+        exit;
+    }
+    
+    
 }
 ?>
 <!DOCTYPE html>
