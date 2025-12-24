@@ -191,7 +191,7 @@ class Utilisateur
         if($this->user_role !== "guide"){
             return true;
         }
-        $this->guide_approuve === 1 ;
+        $this->guide_approuve === true ;
     }
 }
 ?>

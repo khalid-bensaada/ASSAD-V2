@@ -21,7 +21,12 @@ if (isset($_POST['login'])) {
         $errors['password_error'] = 'Email or password not correct try again please';
         exit;
     }
-    
+
+    $actif = $user->actif() === "actif";
+    if($actif!=="actif"){
+        $errors['password_error'] = 'Sorry the acount not actif';
+    }
+
 
 
 }
