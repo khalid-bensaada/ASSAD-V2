@@ -178,5 +178,11 @@ class Utilisateur
         return $stmt->fetch(PDO::FETCH_ASSOC);
 
     }
+
+    public function verifyP($password){
+        return password_verify($password , $this->password_hash);
+    }
+
+   
 }
 ?>
