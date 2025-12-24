@@ -31,6 +31,10 @@ if (isset($_POST['login'])) {
         exit;
     }
 
+    $_SESSION['id'] = $utilisateur->getid();
+    $_SESSION['username'] = $utilisateur->getusername();
+    $_SESSION['user_role'] = $utilisateur->getrole();
+
     switch($user -> getrole()){
         case "admin":
             header("Location: admin.php");
