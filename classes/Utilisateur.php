@@ -183,6 +183,10 @@ class Utilisateur
         return password_verify($password , $this->password_hash);
     }
 
-   
+    public function actif(){
+        $this->actif === "actif" ;
+    }
+
+    
 }
 ?>
