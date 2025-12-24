@@ -1,3 +1,9 @@
+<?php
+require_once 'classes/Database.php';
+
+$db = new Database();
+$pdo = $db->getPdo();
+?>
 <!DOCTYPE html>
 
 <html class="dark" lang="en">
