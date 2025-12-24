@@ -10,14 +10,20 @@ if (isset($_POST['login'])) {
     $password = $_POST['password'];
 
     require_once 'classes/Utilisateur.php';
-    $user = new Utilisateur($email,$password);
+    $user = new Utilisateur($email, $password);
     $select = $user->foundEmail($email);
-    if(!$select){
-        $errors['email_error']='Email or password not correct try again please';
+    if (!$select) {
+        $errors['email_error'] = 'Email or password not correct try again please';
+        exit;
+    }
+    $verify = $user->verifyP($password);
+    if (!$verify) {
+        $errors['password_error'] = 'Email or password not correct try again please';
         exit;
     }
     
-    
+
+
 }
 ?>
 <!DOCTYPE html>
