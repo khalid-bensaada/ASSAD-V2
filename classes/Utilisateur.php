@@ -12,10 +12,11 @@ class Utilisateur
     private bool $actif;
     private bool $guide_approuve;
 
+    private string $reapet ;
     private $pdo;
 
     // make objects for the attributs i make 
-    public function __construct(string $username = "", string $email = "", string $user_role = "", string $password_hash = "", bool $actif = false, bool $guide_approuve = false)
+    public function __construct(string $username = "", string $email = "", string $user_role = "", string $password_hash = "", string $reapet = "",bool $actif = false, bool $guide_approuve = false)
     {
 
         $this->username = $username;
@@ -24,6 +25,7 @@ class Utilisateur
         $this->password_hash = $password_hash;
         $this->actif = $actif;
         $this->guide_approuve = $guide_approuve;
+        $this->reapet = $reapet;
     }
 
     //Get for read the value
@@ -56,6 +58,9 @@ class Utilisateur
         return $this->password_hash;
     }
 
+    public function getreapet(): string{
+        return $this->reapet;
+    }
     // get object of actif in function 
     public function getactif(): bool
     {
@@ -99,6 +104,12 @@ class Utilisateur
         $this->guide_approuve = $guide_approuve;
     }
 
+    public function emptyV (){
+        if(!empty($this->username) && !empty($this->email) && !empty($this->user_role) && !empty($this->password_hash) ){
+
+        }
+    }
+
     public function create()
     {
         $sql = "INSERT INTO utilisateurs (username, email, user_role , password_hash )
@@ -116,6 +127,7 @@ class Utilisateur
         ]);
 
     }
+    
     
 
     public function findByEmail($email)
