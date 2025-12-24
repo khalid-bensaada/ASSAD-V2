@@ -117,6 +117,14 @@ class Utilisateur
 
     }
 
-    
+    public function findByEmail($email)
+    {
+        $sql = "SELECT * FROM utilisateur WHERE email = ?";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$email]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+
+    }
 }
 ?>
