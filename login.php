@@ -22,13 +22,11 @@ if (isset($_POST['login'])) {
         exit;
     }
 
-    $actif = $user->actif() === "actif";
-    if($actif!=="actif"){
-        $errors['password_error'] = 'Sorry the acount not actif';
+    if($user->getactif()!== "actif"){
+        $errors[] = 'Sorry the acount not actif';
     }
 
-
-
+    if ($user -> )
 }
 ?>
 <!DOCTYPE html>

@@ -183,15 +183,5 @@ class Utilisateur
         return password_verify($password , $this->password_hash);
     }
 
-    public function actif(){
-        $this->actif === "actif" ;
-    }
-
-    public function guide(){
-        if($this->user_role !== "guide"){
-            return true;
-        }
-        $this->guide_approuve === true ;
-    }
 }
 ?>
