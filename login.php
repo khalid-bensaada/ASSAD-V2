@@ -26,7 +26,11 @@ if (isset($_POST['login'])) {
         $errors[] = 'Sorry the acount not actif';
     }
 
-    if ($user -> )
+    if ($user -> getrole() === "guide" && !$user ->getapprouve()){
+        header("Location: ");
+        exit;
+    }
+    
 }
 ?>
 <!DOCTYPE html>
