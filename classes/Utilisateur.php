@@ -131,7 +131,15 @@ class Utilisateur
 
     }
 
-    
+    public function longP()
+    {
+        $errors = [];
+        $this->errors = $errors;
+        if (strlen($this->password_hash) < 6) {
+            $errors['password_error'] = "Le mot de passe doit faire au moins 6 caractères.";
+        }
+
+    }
     public function create()
     {
         $sql = "INSERT INTO utilisateurs (username, email, user_role , password_hash )
