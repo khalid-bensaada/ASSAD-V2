@@ -99,6 +99,24 @@ class Utilisateur
         $this->guide_approuve = $guide_approuve;
     }
 
+    public function create()
+    {
+        $sql = "INSERT INTO utilisateurs (username, email, user_role , password_hash )
+                VALUES (username,email , user_role , password_hash)";
 
+        $stmt = $this->pdo->prepare($sql);
+
+        $hash = password_hash($this->password_hash, PASSWORD_DEFAULT);
+
+        return $stmt->execute([
+            ':username' => $this->username,
+            ':email' => $this->email,
+            ':user_role' => $this->user_role,
+            ':password_hash' => $this->$hash
+        ]);
+
+    }
+
+    
 }
 ?>
