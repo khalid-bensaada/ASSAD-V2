@@ -11,12 +11,15 @@ if (isset($_POST['sign'])) {
     $password_raw = $_POST["password"];
     $role = $_POST["user_role"];
     $reapet = $_POST["confermation"];
+    if ($password_raw !== $reapet){
+        $errors ['reaplet_error'] = 'the password is not the same';
+    }
 
     require_once 'classes/Utilisateur.php';
-    $user = new Utilisateur();
+    $user = new Utilisateur($name,$email,$password_raw,$role,$reapet);
     $user-> longP();
     $user-> regexE();
-    $user-> foundEmail();
+    $user-> foundEmail($email);
     $user-> hash();
     $user->create();
     
