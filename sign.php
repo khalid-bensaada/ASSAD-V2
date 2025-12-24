@@ -15,6 +15,7 @@ if (isset($_POST['sign'])) {
     require_once 'classes/Utilisateur.php';
     $user = new Utilisateur();
     $user-> longP();
+    $user-> regexE();
     
 
     
