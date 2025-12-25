@@ -110,16 +110,6 @@ class Utilisateur
         $this->guide_approuve = $guide_approuve;
     }
 
-    public function emptyV()
-    {
-        if (!empty($this->username) && !empty($this->email) && !empty($this->user_role) && !empty($this->password_hash) && !empty($this->reapet)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
     public function regexE()
     {
         $errors = [];
@@ -131,21 +121,27 @@ class Utilisateur
 
     }
 
-    public function longP()
+    public function lengthP()
     {
         $errors = [];
         $this->errors = $errors;
         if (strlen($this->password_hash) < 6) {
             $errors['password_error'] = "Le mot de passe doit faire au moins 6 caractères.";
         }
+    }
+
+    public function regexP()
+    {
+        $errors = [];
+        $this->errors = $errors;
         $passRegex = '/^(?=.*[a-zA-Z])(?=.*[\d])(?=.*[-_@&!#\.*]){8,}$/';
         if (!preg_match($passRegex, $this->password_hash)) {
             $errors['password_error'] = "L'adresse email n'est pas valide.";
         }
-
     }
 
-    public function hash(){
+    public function hash()
+    {
         $password_raw = password_hash($this->password_hash, PASSWORD_DEFAULT);
         $this->password_raw = $password_raw;
     }
@@ -179,8 +175,9 @@ class Utilisateur
 
     }
 
-    public function verifyP($password){
-        return password_verify($password , $this->password_hash);
+    public function verifyP($password)
+    {
+        return password_verify($password, $this->password_hash);
     }
 
 }

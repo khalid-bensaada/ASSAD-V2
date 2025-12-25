@@ -17,12 +17,34 @@ if (isset($_POST['sign'])) {
 
     require_once 'classes/Utilisateur.php';
     $user = new Utilisateur($name,$email,$password_raw,$role,$reapet);
-    $user-> longP();
-    $user-> regexE();
-    $user-> foundEmail($email);
-    $user-> hash();
-    $user->create();
     
+     if (empty($name)) {
+        $erreurs['name'] = "Le nom est obligatoire";
+    }
+
+    if (empty($email)) {
+        $erreurs['email'] = "L'email est obligatoire";
+    }
+
+    if (empty($password_raw)) {
+        $erreurs['password_raw'] = "Mot de passe obligatoire";
+    }
+
+    if (empty($reapet)) {
+        $erreurs['reapet'] = "Confirmation obligatoire";
+    }
+
+    $user->lengthP();
+
+    $user->hash();
+
+    $user->regexE();
+
+    $user->regexP();
+    
+    $user->create();
+
+
 }
 
 ?>

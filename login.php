@@ -37,13 +37,13 @@ if (isset($_POST['login'])) {
 
     switch($user -> getrole()){
         case "admin":
-            header("Location: admin.php");
+            header("Location: dashboard_admin.php");
             break;
         case "guide":
-            header("Location: guide.php");
+            header("Location: dashboard_guide.php");
             break;
         case "visireur":
-            header("location: visiteur.php");
+            header("location: dashboard_visiteur.php");
             break;
     }
 
