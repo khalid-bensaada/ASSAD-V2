@@ -8,7 +8,7 @@ if (isset($_POST['sign'])) {
     $errors = [];
     $name = trim($_POST["username"]);
     $email = trim($_POST["email"]);
-    $password_raw = $_POST["password"];
+    $password_raw = $_POST["password_hash"];
     $role = $_POST["user_role"];
     $reapet = $_POST["confermation"];
     if ($password_raw !== $reapet){
@@ -16,28 +16,29 @@ if (isset($_POST['sign'])) {
     }
 
     require_once 'classes/Utilisateur.php';
-    $user = new Utilisateur($name,$email,$password_raw,$role,$reapet);
+    $user = new Utilisateur($name,$email ,$role,$password_raw,$reapet);
     
      if (empty($name)) {
-        $erreurs['name'] = "Le nom est obligatoire";
+        $errors['name'] = "Enter The name";
     }
 
     if (empty($email)) {
-        $erreurs['email'] = "L'email est obligatoire";
+        $errors['email'] = "Enter Email";
     }
 
     if (empty($password_raw)) {
-        $erreurs['password_raw'] = "Mot de passe obligatoire";
+        $errors['password_raw'] = "Enter password";
     }
 
     if (empty($reapet)) {
-        $erreurs['reapet'] = "Confirmation obligatoire";
+        $errors['reapet'] = "Enter confirmation of password";
     }
+
 
     $user->lengthP();
 
     $user->hash();
-
+    
     $user->regexE();
 
     $user->regexP();
@@ -154,7 +155,7 @@ if (isset($_POST['sign'])) {
                     <h2 class="text-3xl font-bold text-white">Create Account</h2>
                     <p class="text-text-muted">Enter your details to register as a new member.</p>
                 </div>
-                <form action="classes/Utilisateur.php" class="flex flex-col gap-5" method="POST">
+                <form action="" class="flex flex-col gap-5" method="POST">
                     <!-- Role Selector -->
                     <div class="flex flex-col gap-2">
                         <label class="text-white text-sm font-medium ml-1">I am registering as a</label>

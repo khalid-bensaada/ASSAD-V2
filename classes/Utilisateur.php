@@ -1,11 +1,11 @@
 <?php
 
-require_once 'classes/Database.php';
+require_once 'Database.php';
 
-class Utilisateur
+class Utilisateur extends Database
 {
     private int $id;
-    private string $username;
+    private string $nameuser;
     private string $email;
     private string $user_role;
     private string $password_hash;
@@ -13,13 +13,13 @@ class Utilisateur
     private bool $guide_approuve;
 
     private string $reapet;
-    private $pdo;
+    public $pdo;
 
     // make objects for the attributs i make 
-    public function __construct(string $username = "", string $email = "", string $user_role = "", string $password_hash = "", string $reapet = "", bool $actif = false, bool $guide_approuve = false)
+    public function __construct(string $nameuser = "", string $email = "", string $user_role = "", string $password_hash = "", string $reapet = "", bool $actif = false, bool $guide_approuve = false)
     {
-
-        $this->username = $username;
+        parent::__construct();
+        $this->username = $nameuser;
         $this->email = $email;
         $this->user_role = $user_role;
         $this->password_hash = $password_hash;
@@ -38,7 +38,7 @@ class Utilisateur
     // get object of username in function 
     public function getusername(): string
     {
-        return $this->username;
+        return $this->nameuser;
     }
 
     // get object of email in function 
@@ -80,9 +80,9 @@ class Utilisateur
     {
         $this->id = $id;
     }
-    public function setusername(string $username): void
+    public function setusername(string $nameuser): void
     {
-        $this->username = $username;
+        $this->username = $nameuser;
     }
     public function setemail(string $email): void
     {
@@ -143,12 +143,12 @@ class Utilisateur
     public function hash()
     {
         $password_raw = password_hash($this->password_hash, PASSWORD_DEFAULT);
-        $this->password_raw = $password_raw;
+        $this->password_hash = $password_raw;
     }
     public function create()
     {
         $sql = "INSERT INTO utilisateurs (username, email, user_role , password_hash )
-                VALUES (username,email , user_role , password_hash)";
+                VALUES (:username, :email, :user_role, :password_hash)";
 
         $stmt = $this->pdo->prepare($sql);
 
@@ -158,7 +158,7 @@ class Utilisateur
             ':username' => $this->username,
             ':email' => $this->email,
             ':user_role' => $this->user_role,
-            ':password_hash' => $this->$hash
+            ':password_hash' => $this->password_hash
         ]);
 
     }
