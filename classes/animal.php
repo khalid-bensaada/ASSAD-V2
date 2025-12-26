@@ -26,5 +26,43 @@ class Animale extends Database
 
     }
 
+    //GETTERS
+    public function getAid()
+    {
+        return $this->Aid;
+    }
+    public function getname()
+    {
+        return $this->name;
+    }
 
+    public function getalimentation()
+    {
+        return $this->alimentation;
+    }
+
+    public function getimage()
+    {
+        return $this->image;
+    }
+
+    public function getlive()
+    {
+        return $this->live;
+    }
+    public function getdescription()
+    {
+        return $this->description;
+    }
+    public function getidhabitat()
+    {
+        return $this->idhabitat;
+    }
+    public function getviewsanimal()
+    {
+        return $this->views_animal;
+    }
+
+    
+}
 ?>
