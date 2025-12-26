@@ -152,15 +152,25 @@ class Animale extends Database
     }
 
     public function deleteAnimal()
-
     {
         $sql = "DELETE FROM Animal WHERE id = ?";
         $stmt = $this->pdo->prepare($sql);
-        
+
         $stmt->execute([$this->Aid]);
 
         header("Location: admin_animaux.php");
         exit;
+    }
+    public function editanimale()
+    {
+        $sql = "UPDATE animaux
+        SET  name_animal = ? , alimentation = ? , image =? , idhabitat = ?
+        WHERE id = ?";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt -> execute([$this->Aid]);
+
+        header("Location: admin_animaux.php");
+        exit();
     }
 
 }
