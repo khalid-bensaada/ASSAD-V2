@@ -172,6 +172,6 @@ class Animale extends Database
         header("Location: admin_animaux.php");
         exit();
     }
-
+    
 }
 ?>
