@@ -79,4 +79,16 @@ class Habitat
         ]);
 
     }
+    public function deleteHabitat()
+
+    {
+        $sql = "DELETE FROM habitats WHERE id_hab = ?";
+        $stmt = $this->pdo->prepare($sql);
+        
+        $stmt->execute([$this->id_hab]);
+
+        header("Location: admin_habitats.php");
+        exit;
+    }
 }
+?>
