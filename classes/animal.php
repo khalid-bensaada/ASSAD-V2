@@ -97,7 +97,26 @@ class Animale extends Database
         $this->views_animal = $views_animal;
     }
 
+    public function list()
+    {
+        $query = "
+        SELECT 
+            a.id,
+            a.name_animal AS name,
+            a.description AS description,
+            h.hab_name AS idhabitat,
+            h.zonezoo AS live
+        FROM animaux a
+        LEFT JOIN habitats h ON a.id_habitat = h.id_hab
+    ";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     
+
 
 }
 ?>
