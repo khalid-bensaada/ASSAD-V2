@@ -135,6 +135,21 @@ class Animale extends Database
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function creatAnimal()
+    {
+        $sql = "INSERT INTO animaux (name_animal, alimentation, image , id_habitat )
+                VALUES (:name_animal, :alimentation, :image, :id_habitat)";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        return $stmt->execute([
+            ':name_animal' => $this->name,
+            ':alimentation' => $this->alimentation,
+            ':image' => $this->image,
+            ':id_habitat' => $this->idhabitat
+        ]);
+
+    }
 
 
 }
