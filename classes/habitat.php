@@ -23,7 +23,7 @@ class Habitat
         $this->zonezoo = $zonezoo;
     }
 
-    
+
     public function getIdHab(): ?int
     {
         return $this->id_hab;
@@ -41,7 +41,7 @@ class Habitat
         return $this->zonezoo;
     }
 
-    
+
     public function listerTous(): array
     {
         $stmt = $this->pdo->query(
@@ -64,5 +64,19 @@ class Habitat
 
         return $habitats;
     }
-    
+    public function creathabitat()
+    {
+        $sql = "INSERT INTO habitats (hab_name,  description , zonezoo )
+                VALUES (:hab_name, :description, :zonezoo)";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        return $stmt->execute([
+            ':hab_name' => $this->hab_name,
+            
+            ':description' => $this->description,
+            ':zonezoo' => $this->zonezoo
+        ]);
+
+    }
 }
