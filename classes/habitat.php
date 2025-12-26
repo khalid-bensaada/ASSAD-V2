@@ -24,5 +24,23 @@ class Habitat
     }
 
     
+    public function getIdHab(): ?int
+    {
+        return $this->id_hab;
+    }
+    public function getHabName(): string
+    {
+        return $this->hab_name;
+    }
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+    public function getZoneZoo(): string
+    {
+        return $this->zonezoo;
+    }
+
+    
     
 }
