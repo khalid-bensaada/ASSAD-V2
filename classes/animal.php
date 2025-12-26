@@ -115,7 +115,26 @@ class Animale extends Database
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    
+    public function listByHabitat($idhabitat)
+    {
+        $query = "
+        SELECT 
+            a.id,
+            a.name_animal AS animal_nom,
+            a.description AS animal_desc,
+            h.hab_name AS habitat_nom,
+            h.zonezoo AS habitat_zone
+        FROM animaux a
+        INNER JOIN habitats h ON a.id_habitat = h.id_hab
+        WHERE h.id_hab = :habitat_id
+    ";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':habitat_id', $idhabitat, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 
 }
