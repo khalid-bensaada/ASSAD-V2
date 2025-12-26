@@ -42,5 +42,26 @@ class Habitat
     }
 
     
-    
+    public function listerTous(): array
+    {
+        $stmt = $this->pdo->query(
+            "SELECT id_hab, hab_name, description, zonezoo
+             FROM habitats
+             ORDER BY hab_name"
+        );
+
+        $habitats = [];
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $habitats[] = new Habitat(
+                $this->pdo,
+                $row['id_hab'],
+                $row['hab_name'],
+                $row['description'],
+                $row['zonezoo']
+            );
+        }
+
+        return $habitats;
+    }
 }
