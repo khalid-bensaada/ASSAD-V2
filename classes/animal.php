@@ -63,6 +63,41 @@ class Animale extends Database
         return $this->views_animal;
     }
 
+    //SETTERS
+    public function setAid(int $Aid): void
+    {
+        $this->Aid = $Aid;
+    }
+    public function setname(string $name): void
+    {
+        $this->name = $name;
+    }
+    public function setalimentation(string $alimentation): void
+    {
+        $this->alimentation = $alimentation;
+    }
+    public function setimage(string $image): void
+    {
+        $this->image = $image;
+    }
+    public function setlive(string $live): void
+    {
+        $this->live = $live;
+    }
+    public function setdescription(string $description): void
+    {
+        $this->description = $description;
+    }
+    public function setidhabitat(int $idhabitat): void
+    {
+        $this->idhabitat = $idhabitat;
+    }
+    public function setviewsanimal(int $views_animal): void
+    {
+        $this->views_animal = $views_animal;
+    }
+
     
+
 }
 ?>
