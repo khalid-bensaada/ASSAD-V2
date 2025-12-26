@@ -165,7 +165,7 @@ class Animale extends Database
     {
         $sql = "UPDATE animaux
         SET  name_animal = ? , alimentation = ? , image =? , idhabitat = ?
-        WHERE id = ?";
+        WHERE id = ?"; 
         $stmt = $this->pdo->prepare($sql);
         $stmt -> execute([$this->Aid]);
 
