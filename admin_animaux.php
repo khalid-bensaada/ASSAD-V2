@@ -11,7 +11,66 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['user_role'] !== 'admin') {
 $db = new Database();
 $animal = new Animale();
 $animal->pdo = $db->getPdo();
-$animaux = $animal->list();
+$animaux = $animalObj->list();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    $name = trim($_POST['nam'] ?? '');
+    $food = trim($_POST['food'] ?? '');
+    $habitat = intval($_POST['habitats'] ?? 0);
+
+    $errors = [];
+
+    if ($name === '') {
+        $errors[] = "Le nom de l'animal est requis.";
+    }
+
+    if ($food === '') {
+        $errors[] = "Le type d'alimentation est requis.";
+    }
+
+    if ($habitat <= 0) {
+        $errors[] = "Veuillez choisir un habitat valide.";
+    }
+
+    $imageName = null;
+    if (isset($_FILES['img']) && $_FILES['img']['error'] === UPLOAD_ERR_OK) {
+        $allowed = ['jpg', 'jpeg', 'png', 'gif'];
+        $fileExt = strtolower(pathinfo($_FILES['img']['name'], PATHINFO_EXTENSION));
+
+        if (!in_array($fileExt, $allowed)) {
+            $errors[] = "Format d'image non autorisé (jpg, png, gif).";
+        } else {
+            $imageName = time() . '_' . basename($_FILES['img']['name']);
+            $uploadDir = __DIR__ . '/uploads/';
+            move_uploaded_file($_FILES['img']['tmp_name'], $uploadDir . $imageName);
+        }
+    }
+
+    if (empty($errors)) {
+        $animal->setname($name);
+        $animal->setalimentation($food);
+        $animal->setidhabitat($habitat);
+        $animal->setimage($imageName);
+
+        if ($animal->creatAnimal()) {
+
+            header("Location: admin_animaux.php?success=1");
+            exit;
+        } else {
+            $errors[] = "Erreur lors de l'ajout de l'animal.";
+        }
+    }
+
+
+    if (!empty($errors)) {
+        foreach ($errors as $err) {
+            echo "<p style='color:red;'>$err</p>";
+        }
+    }
+}
+
+
 ?>
 
 
@@ -135,49 +194,56 @@ $animaux = $animal->list();
                     <!-- Animal Cards Grid -->
                     <div id="animalGrid"
                         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
-                        <?php while ($row = $result->fetch_assoc()): ?>
+                        <?php foreach ($animaux as $row): ?>
                             <div
                                 class="group flex flex-col bg-surface-light dark:bg-surface-dark rounded-xl overflow-hidden border border-border-light dark:border-border-dark shadow-sm hover:shadow-lg transition-all hover:scale-[1.02] duration-300">
+
+                                <!-- Image + Habitat badge -->
                                 <div class="relative h-48 overflow-hidden">
                                     <div
                                         class="absolute top-3 right-3 bg-white/90 dark:bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-xs font-bold text-text-main dark:text-white flex items-center gap-1">
                                         <span class="material-symbols-outlined text-[14px] text-primary">public</span>
-                                        <?= htmlspecialchars($row['hab_name']) ?>
+                                        <?= htmlspecialchars($row['habitat_nom'] ?? 'N/A') ?>
                                     </div>
                                     <div class="w-full h-full bg-gray-200 bg-center bg-cover"
-                                        style="background-image: url('images/<?= htmlspecialchars($row['image']) ?>');">
+                                        style="background-image: url('uploads/<?= htmlspecialchars($row['image'] ?? 'default.png') ?>');">
                                     </div>
                                 </div>
+
+                                <!-- Contenu texte -->
                                 <div class="p-4 flex flex-col flex-1 gap-3">
                                     <div>
                                         <div class="flex justify-between items-start">
                                             <h3 class="text-xl font-bold text-text-main dark:text-white">
-                                                <?= htmlspecialchars($row['name_animal']) ?>
+                                                <?= htmlspecialchars($row['name'] ?? 'Unnamed') ?>
                                             </h3>
                                             <span
                                                 class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-xs font-bold border border-amber-200">
-                                                <?= htmlspecialchars($row['hab_name']) ?>
+                                                <?= htmlspecialchars($row['habitat_nom'] ?? 'N/A') ?>
                                             </span>
                                         </div>
                                         <p class="text-text-secondary text-sm italic">
-                                            <?= htmlspecialchars($row['alimentation']) ?>
+                                            <?= htmlspecialchars($row['alimentation'] ?? 'Unknown') ?>
                                         </p>
                                     </div>
+
+                                    
                                     <div
                                         class="mt-auto pt-4 flex gap-2 border-t border-border-light dark:border-border-dark">
-                                        <button
+                                        <a href="delete_animal.php?id=<?= $row['id'] ?>"
                                             class="flex-1 flex items-center justify-center gap-2 h-9 rounded-lg border border-border-light dark:border-gray-600 bg-transparent text-text-main dark:text-gray-300 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                                             <span class="material-symbols-outlined text-[18px]">edit</span> Edit
-                                        </button>
-                                        <button
+                                        </a>
+                                        <a href="edit_animal.php?id=<?= $row['id'] ?>"
                                             class="flex items-center justify-center w-9 h-9 rounded-lg border border-red-100 bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
+                                            onclick="return confirm('Are you sure you want to delete this animal?')"
                                             title="Delete">
                                             <span class="material-symbols-outlined text-[18px]">delete</span>
-                                        </button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
-                        <?php endwhile; ?>
+                        <?php endforeach; ?>
                     </div>
 
                     <!-- Add Animal Form -->
