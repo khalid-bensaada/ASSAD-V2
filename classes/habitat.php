@@ -90,5 +90,6 @@ class Habitat
         header("Location: admin_habitats.php");
         exit;
     }
+    
 }
 ?>
