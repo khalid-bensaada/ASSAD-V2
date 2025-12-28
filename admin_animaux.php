@@ -1,6 +1,20 @@
 <?php
+session_start();
+require_once 'Database.php';
+require_once 'Animale.php';
 
+if (!isset($_SESSION['user']) || $_SESSION['user']['user_role'] !== 'admin') {
+    header('Location: login.php');
+    exit;
+}
+
+$db = new Database();
+$animal = new Animale();
+$animal->pdo = $db->getPdo();
+$animaux = $animal->list();
 ?>
+
+
 <!DOCTYPE html>
 
 <html class="light" lang="en">
@@ -138,14 +152,16 @@
                                     <div>
                                         <div class="flex justify-between items-start">
                                             <h3 class="text-xl font-bold text-text-main dark:text-white">
-                                                <?= htmlspecialchars($row['name_animal']) ?></h3>
+                                                <?= htmlspecialchars($row['name_animal']) ?>
+                                            </h3>
                                             <span
                                                 class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-xs font-bold border border-amber-200">
                                                 <?= htmlspecialchars($row['hab_name']) ?>
                                             </span>
                                         </div>
                                         <p class="text-text-secondary text-sm italic">
-                                            <?= htmlspecialchars($row['alimentation']) ?></p>
+                                            <?= htmlspecialchars($row['alimentation']) ?>
+                                        </p>
                                     </div>
                                     <div
                                         class="mt-auto pt-4 flex gap-2 border-t border-border-light dark:border-border-dark">
