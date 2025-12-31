@@ -51,35 +51,61 @@ class Reservation extends Database
         $this->numbers = $n;
     }
 
-    public function creer()
+    public function creer(): bool
     {
-        $sql = "INSERT INTO reservations (idvisite, iduser, numbers) VALUES (:idvisite, :iduser, :numbers)";
-        $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute([
+        
+        $stmt = $this->pdo->prepare("SELECT capacite_max, id_visites FROM visitesguidees WHERE id_visites = ?");
+        $stmt->execute([$this->idvisite]);
+        $visite = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$visite)
+            return false;
+
+        $stmt2 = $this->pdo->prepare("SELECT SUM(numbers) as total FROM reservations WHERE idvisite = ?");
+        $stmt2->execute([$this->idvisite]);
+        $row = $stmt2->fetch(PDO::FETCH_ASSOC);
+        $totalReserve = $row['total'] ?? 0;
+
+        if (($totalReserve + $this->numbers) > $visite['capacite_max']) {
+            return false; 
+        }
+
+        $stmt3 = $this->pdo->prepare("INSERT INTO reservations (idvisite, iduser, numbers) VALUES (:idvisite, :iduser, :numbers)");
+        return $stmt3->execute([
             ':idvisite' => $this->idvisite,
             ':iduser' => $this->iduser,
             ':numbers' => $this->numbers
         ]);
     }
 
-    public function listerParVisite($idvisite)
+    
+    public function listerParVisite(int $idvisite): array
     {
-        $sql = "SELECT r.*, u.username FROM reservations r 
-                JOIN utilisateurs u ON r.iduser = u.id
-                WHERE r.idvisite = :idvisite";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':idvisite' => $idvisite]);
+        $stmt = $this->pdo->prepare(
+            "SELECT r.id_reserv, r.numbers, r.date_reservation, u.username, u.email
+             FROM reservations r
+             INNER JOIN utilisateurs u ON r.iduser = u.id
+             WHERE r.idvisite = ?
+             ORDER BY r.date_reservation DESC"
+        );
+        $stmt->execute([$idvisite]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function listerParVisiteur($iduser)
+    
+    public function listerParVisiteur(int $iduser): array
     {
-        $sql = "SELECT r.*, v.title FROM reservations r 
-                JOIN visitesguidees v ON r.idvisite = v.id_visites
-                WHERE r.iduser = :iduser";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':iduser' => $iduser]);
+        $stmt = $this->pdo->prepare(
+            "SELECT r.id_reserv, r.numbers, r.date_reservation, v.title
+             FROM reservations r
+             INNER JOIN visitesguidees v ON r.idvisite = v.id_visites
+             WHERE r.iduser = ?
+             ORDER BY r.date_reservation DESC"
+        );
+        $stmt->execute([$iduser]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
+
+$a = new Reservation(1,2,3);
 ?>

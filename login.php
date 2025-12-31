@@ -35,17 +35,19 @@ if (isset($_POST['login'])) {
     $_SESSION['username'] = $utilisateur->getusername();
     $_SESSION['user_role'] = $utilisateur->getrole();
 
-    switch($user -> getrole()){
-        case "admin":
-            header("Location: dashboard_admin.php");
-            break;
-        case "guide":
-            header("Location: dashboard_guide.php");
-            break;
-        case "visireur":
-            header("location: dashboard_visiteur.php");
-            break;
-    }
+    print_r($_SESSION);
+
+    // switch($user -> getrole()){
+    //     case "admin":
+    //         header("Location: dashboard_admin.php");
+    //         break;
+    //     case "guide":
+    //         header("Location: dashboard_guide.php");
+    //         break;
+    //     case "visireur":
+    //         header("location: dashboard_visiteur.php");
+    //         break;
+    // }
 
 }
 ?>

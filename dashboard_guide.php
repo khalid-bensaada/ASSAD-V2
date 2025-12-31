@@ -48,6 +48,16 @@ if (isset($_GET['annuler']) && is_numeric($_GET['annuler'])) {
     header("Location: dashboard_guide.php");
     exit;
 }
+$stmt = $pdo->prepare("
+    SELECT r.id_reserv, r.numbers, r.date_reservation, u.username, v.title
+    FROM reservations r
+    INNER JOIN utilisateurs u ON r.iduser = u.id
+    INNER JOIN visitesguidees v ON r.idvisite = v.id_visites
+    WHERE v.id_guide = ?
+    ORDER BY r.date_reservation DESC
+");
+$stmt->execute([$_SESSION['user']['id']]);
+$reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -109,6 +119,37 @@ if (isset($_GET['annuler']) && is_numeric($_GET['annuler'])) {
                     <?php endforeach; ?>
                 </tbody>
             </table>
+        </div>
+        <div class="mt-12">
+            <h2 class="text-2xl font-bold mb-6">Réservations de mes visites</h2>
+
+            <?php if (empty($reservations)): ?>
+                <p class="text-gray-500">Aucune réservation pour le moment.</p>
+            <?php else: ?>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse bg-white dark:bg-gray-900 rounded-xl shadow">
+                        <thead>
+                            <tr class="bg-gray-100 dark:bg-gray-800">
+                                <th class="p-4 font-semibold text-gray-700 dark:text-gray-300">Visite</th>
+                                <th class="p-4 font-semibold text-gray-700 dark:text-gray-300">Visiteur</th>
+                                <th class="p-4 font-semibold text-gray-700 dark:text-gray-300">Nombre de personnes</th>
+                                <th class="p-4 font-semibold text-gray-700 dark:text-gray-300">Date de réservation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($reservations as $res): ?>
+                                <tr
+                                    class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                                    <td class="p-4"><?= htmlspecialchars($res['title']) ?></td>
+                                    <td class="p-4"><?= htmlspecialchars($res['username']) ?></td>
+                                    <td class="p-4"><?= htmlspecialchars($res['numbers']) ?></td>
+                                    <td class="p-4"><?= htmlspecialchars($res['date_reservation']) ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endif; ?>
         </div>
     </main>
 

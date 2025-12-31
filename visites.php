@@ -1,44 +1,29 @@
 <?php
 session_start();
 require_once 'Database.php';
-require_once 'VisiteGuidee.php';
 require_once 'Reservation.php';
 
-if (!isset($_SESSION['user'])) {
-    header('Location: login.php');
+
+if (!isset($_SESSION['user']) || $_SESSION['user']['user_role'] !== 'visiteur') {
+    header("Location: login.php");
     exit;
 }
 
 $db = new Database();
 $pdo = $db->getPdo();
-$userId = $_SESSION['user']['id'];
 
-
-$visiteObj = new VisiteGuidee();
-$visites = $visiteObj->listerToutes($pdo); 
-
-$reservation = new Reservation();
+$stmt = $pdo->query("SELECT * FROM visitesguidees WHERE statut = 'active' ORDER BY date_visite ASC");
+$visites = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reserver'])) {
-    $idvisite = intval($_POST['idvisite']);
-    $numbers = intval($_POST['numbers']);
+    $reservation = new Reservation();
+    $reservation->setIdVisite(intval($_POST['idvisite']));
+    $reservation->setIdUser($_SESSION['user']['id']);
+    $reservation->setNumbers(intval(value: $_POST['numbers']));
 
-    
-    $visiteInfo = $visiteObj->getVisiteParId($idvisite); 
-    $capRestante = $visiteInfo['capacite_max'] - $visiteObj->totalReserves($idvisite, $pdo);
-
-    if ($numbers <= 0) {
-        $error = "Le nombre de personnes doit être supérieur à 0.";
-    } elseif ($numbers > $capRestante) {
-        $error = "Il ne reste que $capRestante places disponibles pour cette visite.";
-    } else {
-        $reservation->setIdVisite($idvisite);
-        $reservation->setIdUser($userId);
-        $reservation->setNumbers($numbers);
-        $reservation->creer();
-        $success = "Réservation effectuée avec succès !";
-    }
+    $success = $reservation->creer();
+    $message = $success ? "Reservation réussie !" : "Impossible de réserver, capacité dépassée.";
 }
 ?>
 
@@ -47,45 +32,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reserver'])) {
 
 <head>
     <meta charset="UTF-8">
-    <title>Visites disponibles - Zoo ASSAD</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visites - Zoo ASSAD</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-50 dark:bg-gray-900 min-h-screen font-sans">
+<body class="bg-gray-50 text-gray-900">
 
     <div class="container mx-auto p-6">
-        <h1 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">Visites disponibles</h1>
+        <h1 class="text-3xl font-bold mb-6">Visites Disponibles</h1>
 
-        <?php if (isset($error)): ?>
-            <div class="bg-red-100 text-red-800 p-4 rounded mb-4"><?= $error ?></div>
-        <?php elseif (isset($success)): ?>
-            <div class="bg-green-100 text-green-800 p-4 rounded mb-4"><?= $success ?></div>
+        <?php if (isset($message)): ?>
+            <div class="mb-4 p-4 rounded bg-green-200 text-green-800"><?= htmlspecialchars($message) ?></div>
         <?php endif; ?>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <?php foreach ($visites as $v):
-                $reserves = $visiteObj->totalReserves($v['id_visites'], $pdo);
-                $capRestante = $v['capacite_max'] - $reserves;
-                ?>
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 flex flex-col">
-                    <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2"><?= htmlspecialchars($v['title']) ?>
-                    </h2>
-                    <p class="text-gray-700 dark:text-gray-300 mb-2"><?= htmlspecialchars($v['description_visites']) ?></p>
-                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                        Date: <?= $v['date_visite'] ?> | Heure: <?= $v['start_visite'] ?> | Langue: <?= $v['langue'] ?>
-                    </p>
-                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                        Capacité restante: <?= $capRestante ?>
-                    </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <?php foreach ($visites as $visite): ?>
+                <?php
 
-                    <form method="POST" class="flex gap-2 mt-auto">
-                        <input type="hidden" name="idvisite" value="<?= $v['id_visites'] ?>">
-                        <input type="number" name="numbers" min="1" max="<?= $capRestante ?>"
-                            placeholder="Nombre de personnes"
-                            class="w-full p-2 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
-                        <button type="submit" name="reserver"
-                            class="bg-primary text-white px-4 py-2 rounded hover:bg-green-600 transition">Réserver</button>
-                    </form>
+                $stmt2 = $pdo->prepare("SELECT SUM(numbers) as total FROM reservations WHERE idvisite = ?");
+                $stmt2->execute([$visite['id_visites']]);
+                $row = $stmt2->fetch(PDO::FETCH_ASSOC);
+                $totalReserve = $row['total'] ?? 0;
+                $capaciteRestante = $visite['capacite_max'] - $totalReserve;
+                ?>
+                <div class="bg-white rounded-xl shadow p-4 flex flex-col">
+                    <h2 class="text-xl font-bold"><?= htmlspecialchars($visite['title']) ?></h2>
+                    <p class="text-gray-500 text-sm mb-2"><?= htmlspecialchars($visite['description_visites']) ?></p>
+                    <p class="mb-2"><strong>Date:</strong> <?= htmlspecialchars($visite['date_visite']) ?></p>
+                    <p class="mb-2"><strong>Heure:</strong> <?= htmlspecialchars($visite['start_visite']) ?></p>
+                    <p class="mb-2"><strong>Langue:</strong> <?= htmlspecialchars($visite['langue']) ?></p>
+                    <p class="mb-2"><strong>Prix:</strong> <?= htmlspecialchars($visite['prix']) ?> MAD</p>
+                    <p class="mb-2"><strong>Capacité restante:</strong> <?= $capaciteRestante ?></p>
+
+                    <?php if ($capaciteRestante > 0): ?>
+                        <form method="POST" class="mt-auto flex gap-2">
+                            <input type="hidden" name="idvisite" value="<?= $visite['id_visites'] ?>">
+                            <input type="number" name="numbers" value="1" min="1" max="<?= $capaciteRestante ?>"
+                                class="w-16 border rounded px-2 py-1">
+                            <button type="submit" name="reserver"
+                                class="bg-primary text-white px-4 py-2 rounded hover:bg-green-600 transition">Réserver</button>
+                        </form>
+                    <?php else: ?>
+                        <p class="text-red-500 font-bold mt-2">Complet</p>
+                    <?php endif; ?>
                 </div>
             <?php endforeach; ?>
         </div>

@@ -15,7 +15,7 @@ class Utilisateur extends Database
     private string $reapet;
     public $pdo;
 
-    // make objects for the attributs i make 
+
     public function __construct(string $nameuser = "", string $email = "", string $user_role = "", string $password_hash = "", string $reapet = "", bool $actif = false, bool $guide_approuve = false)
     {
         parent::__construct();
@@ -28,31 +28,31 @@ class Utilisateur extends Database
         $this->reapet = $reapet;
     }
 
-    //Get for read the value
+
 
     public function getid(): int
     {
         return $this->id;
     }
 
-    // get object of username in function 
+
     public function getusername(): string
     {
         return $this->nameuser;
     }
 
-    // get object of email in function 
+
     public function getemail(): string
     {
         return $this->email;
     }
-    // get object of user_role in function 
+
     public function getrole(): string
     {
         return $this->user_role;
     }
 
-    // get object of password_hash in function 
+
     public function getpassword(): string
     {
         return $this->password_hash;
@@ -62,19 +62,18 @@ class Utilisateur extends Database
     {
         return $this->reapet;
     }
-    // get object of actif in function 
+
     public function getactif(): bool
     {
         return $this->actif;
     }
 
-    // get object of guide_approuve in function 
+
     public function getapprouve(): bool
     {
         return $this->guide_approuve;
     }
 
-    // for madify values or type of variable
 
     public function setId(int $id): void
     {
@@ -167,7 +166,7 @@ class Utilisateur extends Database
 
     public function foundEmail($email)
     {
-        $sql = "SELECT * FROM utilisateur WHERE email = ?";
+        $sql = "SELECT * FROM utilisateurs WHERE email = ?";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$email]);
 
@@ -175,9 +174,9 @@ class Utilisateur extends Database
 
     }
 
-    public function verifyP($password)
+    public function verifyP($password_hash)
     {
-        return password_verify($password, $this->password_hash);
+        return password_verify($password_hash, $this->password_hash);
     }
 
 }
